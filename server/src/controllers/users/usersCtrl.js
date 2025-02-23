@@ -4,12 +4,14 @@ const Income = require("../../model/Income");
 const Expense = require("../../model/Expense"); 
 const expressAsyncHandler = require("express-async-handler");
 const cloudinary = require("../../config/cloudinary");
+
+// ✅ Register User
 const registerUser = expressAsyncHandler(async (req, res) => {
     const { email, firstname, lastname, password, isAdmin } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
-        return res.json({ msg: "User already exists" });
+        return res.status(400).json({ msg: "User already exists" });
     }
 
     const isAdminExists = await User.findOne({ isAdmin: true });
@@ -25,7 +27,7 @@ const registerUser = expressAsyncHandler(async (req, res) => {
         const user = await User.create({ email, firstname, lastname, password, isAdmin });
 
         const token = generateToken(user._id);
-        res.cookie("authToken", token, {
+        await res.cookie("authToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
@@ -44,10 +46,11 @@ const registerUser = expressAsyncHandler(async (req, res) => {
             token,
         });
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({ error: err.message });
     }
 });
 
+// ✅ Fetch User Data
 const fetchUsersCtrl = expressAsyncHandler(async (req, res) => {
     try {
         const email = req.body.email || req.user?.email; 
@@ -63,11 +66,11 @@ const fetchUsersCtrl = expressAsyncHandler(async (req, res) => {
 
         res.json(user);
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({ error: err.message });
     }
 });
 
-
+// ✅ Login User
 const loginUserCtrl = expressAsyncHandler(async (req, res) => {
     const { email, password } = req?.body;
 
@@ -75,7 +78,7 @@ const loginUserCtrl = expressAsyncHandler(async (req, res) => {
     if (userFound && (await userFound.isPasswordMatch(password))) {
         const token = generateToken(userFound._id);
 
-        res.cookie("authToken", token, {
+        await res.cookie("authToken", token, {
             httpOnly: true, 
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
@@ -89,12 +92,14 @@ const loginUserCtrl = expressAsyncHandler(async (req, res) => {
             lastname: userFound.lastname,
             isAdmin: userFound.isAdmin,
             message: "Login successful",
+            token
         });
     } else {
         res.status(401).json({ message: "Invalid email or password" });
     }
 });
 
+// ✅ Fetch All Users Data (Admin)
 const fetchAllUsersData = expressAsyncHandler(async (req, res) => {
     if (!req.user || !req.user.isAdmin) {
         return res.status(403).json({ message: "Access denied. Admins only!" });
@@ -105,29 +110,43 @@ const fetchAllUsersData = expressAsyncHandler(async (req, res) => {
         const expenses = await Expense.find({});
         res.status(200).json({ incomes, expenses });
     } catch (err) {
-        res.status(500).json(err);
+        res.status(500).json({ error: err.message });
     }
 });
+
+// ✅ Upload Profile Picture (Cloudinary)
 const uploadProfilePic = expressAsyncHandler(async (req, res) => {
     try {
         const { profilePic } = req.body;
         if (!profilePic) {
             return res.status(400).json({ message: "No profilePic provided" });
         }
+
+        // Upload to Cloudinary first
+        const uploadedResponse = await cloudinary.uploader.upload(profilePic, {
+            folder: "profile_pics",
+            width: 500,
+            height: 500,
+            crop: "fill",
+        });
+
+        // Update user profile pic in database
         const updatedUser = await User.findByIdAndUpdate(
             req.user._id,
-            { profilePic },
+            { profilePic: uploadedResponse.secure_url },
             { new: true }
         );
+
         res.status(200).json({ profilePic: updatedUser.profilePic });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
+
+// ✅ Logout User
 const logoutUserCtrl = expressAsyncHandler(async (req, res) => {
     try {
-        
-        res.clearCookie("authToken", {
+        await res.clearCookie("authToken", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production", 
             sameSite: "strict",
@@ -139,5 +158,11 @@ const logoutUserCtrl = expressAsyncHandler(async (req, res) => {
     }
 });
 
-
-module.exports = { registerUser, fetchUsersCtrl, loginUserCtrl, fetchAllUsersData,uploadProfilePic,logoutUserCtrl };
+module.exports = { 
+    registerUser, 
+    fetchUsersCtrl, 
+    loginUserCtrl, 
+    fetchAllUsersData, 
+    uploadProfilePic, 
+    logoutUserCtrl 
+};
