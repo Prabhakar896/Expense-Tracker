@@ -16,11 +16,16 @@ const path = require("path");
 
 errorHandler
 dbConnect();
-app.use(cors({
-    origin: "https://expense-tracker-frontt.netlify.app",
-    credentials: true, 
-    methods: "GET,POST,PUT,DELETE" 
-  }))
+
+app.use(
+    cors({
+        origin: "https://expense-tracker-frontt.netlify.app",
+        credentials: true,
+        methods: "GET,POST,PUT,DELETE",
+        allowedHeaders: "Content-Type,Authorization",
+    })
+);
+
 app.use(express.json())
 app.get("/api",(req,res)=>{
     res.json({msg:"Welcome Expenses tracker API"})
