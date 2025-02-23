@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cinzel:wght@400..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Gilda+Display&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Cinzel:wght@400..900&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Gilda+Display&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
+
+@import "tailwindcss";
+
+.bg-local {
+  background-image: url('./assets/images/BackGround.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.custom-gradient {
+  background: linear-gradient(to right, #703851, #54487d);
+  background-size: 300% 300%;
+  animation: gradientAnimation 5s ease-in-out infinite alternate;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: left;
+  }
+  100% {
+    background-position: right;
+  }
+}
+.p1 {
+  font-family: "Exo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+.h1 {
+  font-family: "Exo 2", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+}@keyframes shine {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.animate-shine {
+  animation: shine 3s linear infinite;
+}

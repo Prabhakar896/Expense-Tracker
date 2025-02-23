@@ -1,0 +1,8 @@
+frontend/node_modules/
+server/node_modules
+node_modules/
+frontend/dist/
+server/dist/
+frontend/.env
+server/.env
+.DS_Store
