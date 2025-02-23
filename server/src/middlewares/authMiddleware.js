@@ -12,6 +12,7 @@ const authMiddleware = expressAsyncHandler(async (req, res, next) => {
        
         next();
     } catch (err) {
+        res.clearCookie("authToken");
         res.status(401).json({ message: "Invalid or expired token" });
     }
 });
