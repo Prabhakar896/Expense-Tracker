@@ -17,7 +17,7 @@ const path = require("path");
 errorHandler
 dbConnect();
 app.use(cors({
-    origin: "https://expense-tracker-frontt.netlify.app/",
+    origin: "https://expense-tracker-frontt.netlify.app",
     credentials: true, 
     methods: "GET,POST,PUT,DELETE" 
   }))
