@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
 
     const checkAuth = async () => {
         try {
-            const response = await axios.get("http://localhost:4000/api/users", {
+            const response = await axios.get("https://expense-tracker-crmj.onrender.com/api/users", {
                 withCredentials: true,
             });
             setUser(response.data);
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await axios.post("http://localhost:4000/api/users/logout", {}, { withCredentials: true });
+            await axios.post("https://expense-tracker-crmj.onrender.com/api/users/logout", {}, { withCredentials: true });
             setUser(null);
             navigate("/signup"); // Redirect to sign-up page after logout
         } catch (error) {

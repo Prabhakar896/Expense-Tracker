@@ -13,7 +13,7 @@ function ExpenseList() {
 
     const fetchIncomeDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:4000/api/expenses/spec?page=${currentPage}`, {
+            const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/expenses/spec?page=${currentPage}`, {
                 withCredentials: true,
             });
             setExpense(response.data.expense);
@@ -30,7 +30,7 @@ function ExpenseList() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/expenses/${id}`, {
+            await axios.delete(`https://expense-tracker-crmj.onrender.com/api/expenses/${id}`, {
                 withCredentials: true,
             });
             setExpense(expense.filter((expense) => expense._id !== id));
@@ -51,7 +51,7 @@ function ExpenseList() {
     const handleUpdate = async () => {
         if (!editexpense) return;
         try {
-            const response = await axios.put(`http://localhost:4000/api/expenses/${editexpense._id}`, formData, {
+            const response = await axios.put(`https://expense-tracker-crmj.onrender.com/api/expenses/${editexpense._id}`, formData, {
                 withCredentials: true,
             });
             setExpense(expense.map((expense) => (expense._id === editexpense._id ? response.data : expense)));
@@ -63,7 +63,7 @@ function ExpenseList() {
 
     const handleAddExpense = async () => {
         try {
-            const response = await axios.post("http://localhost:4000/api/expenses/spec", formData, {
+            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/expenses/spec", formData, {
                 withCredentials: true,
             });
             setExpense([...expense, response.data]);

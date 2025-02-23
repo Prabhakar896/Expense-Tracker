@@ -12,7 +12,7 @@ const IncSummary = ({ userId }) => {
   useEffect(() => {
     const fetchIncomeSummary = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/income/summary/${userId}`, {
+        const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/income/summary/${userId}`, {
           withCredentials: true,
         });
   

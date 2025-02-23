@@ -14,7 +14,7 @@ const [totalPages, setTotalPages] = useState(1);
 
     const fetchIncomeDetails = async (page = 1) => {
         try {
-            const response = await axios.get(`http://localhost:4000/api/income/spec?page=${page}`, {
+            const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/income/spec?page=${page}`, {
                 withCredentials: true,
             });
     
@@ -34,7 +34,7 @@ const [totalPages, setTotalPages] = useState(1);
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/income/${id}`, {
+            await axios.delete(`https://expense-tracker-crmj.onrender.com/api/income/${id}`, {
                 withCredentials: true,
             });
             setIncomes(incomes.filter((income) => income._id !== id));
@@ -55,7 +55,7 @@ const [totalPages, setTotalPages] = useState(1);
     const handleUpdate = async () => {
         if (!editIncome) return;
         try {
-            const response = await axios.put(`http://localhost:4000/api/income/${editIncome._id}`, formData, {
+            const response = await axios.put(`https://expense-tracker-crmj.onrender.com/api/income/${editIncome._id}`, formData, {
                 withCredentials: true,
             });
             setIncomes(incomes.map((income) => (income._id === editIncome._id ? response.data : income)));
@@ -67,7 +67,7 @@ const [totalPages, setTotalPages] = useState(1);
 
     const handleAddIncome = async () => {
         try {
-            const response = await axios.post("http://localhost:4000/api/income/spec", formData, {
+            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/income/spec", formData, {
                 withCredentials: true,
             });
             setIncomes([...incomes, response.data]);

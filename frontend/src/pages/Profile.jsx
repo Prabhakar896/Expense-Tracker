@@ -12,7 +12,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const res = await axios.get("http://localhost:4000/api/users/", {
+                const res = await axios.get("https://expense-tracker-crmj.onrender.com/api/users/", {
                     withCredentials: true,
                 });
                 setUser(res.data);
@@ -52,7 +52,7 @@ const Profile = () => {
             if (cloudinaryResponse.status === 200) {
                 const imageUrl = cloudinaryResponse.data.secure_url;
                 const updateResponse = await axios.put(
-                    "http://localhost:4000/api/users/upload-profile-pic",
+                    "https://expense-tracker-crmj.onrender.com/api/users/upload-profile-pic",
                     { profilePic: imageUrl },
                     { withCredentials: true }
                 );
@@ -73,7 +73,7 @@ const Profile = () => {
     };
     const handleLogout = async () => {
         try {
-            const response = await axios.post("http://localhost:4000/api/users/logout", {}, { withCredentials: true });
+            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/users/logout", {}, { withCredentials: true });
             alert(response.data.message);
             navigate("/");
         } catch (error) {

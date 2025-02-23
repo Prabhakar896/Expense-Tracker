@@ -12,7 +12,7 @@ const ExpSummary = ({ userId }) => {
   useEffect(() => {
     const fetchExpenseSummary = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/expenses/summary/${userId}`, {
+        const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/expenses/summary/${userId}`, {
           withCredentials: true,
         });
   

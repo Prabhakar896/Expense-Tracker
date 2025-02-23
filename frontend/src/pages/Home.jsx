@@ -14,7 +14,7 @@ function Home() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get("http://localhost:4000/api/users", {
+                const response = await axios.get("https://expense-tracker-crmj.onrender.com/api/users", {
                     withCredentials: true,
                 });
                 setUserId(response.data._id);
@@ -30,7 +30,7 @@ function Home() {
         const fetchExpenses = async () => {
             if (userId) {
                 try {
-                    const response = await axios.get(`http://localhost:4000/api/tot/summary/exp/${userId}`, {
+                    const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/tot/summary/exp/${userId}`, {
                         withCredentials: true,
                     });
                     setExpenseData(response.data);
@@ -43,7 +43,7 @@ function Home() {
         const fetchIncome = async () => {
             if (userId) {
                 try {
-                    const response = await axios.get(`http://localhost:4000/api/tot/summary/inc/${userId}`, {
+                    const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/tot/summary/inc/${userId}`, {
                         withCredentials: true,
                     });
                     setIncomeData(response.data);
@@ -59,7 +59,7 @@ function Home() {
 
     const handleLogout = async () => {
         try {
-            const response = await axios.post("http://localhost:4000/api/users/logout", {}, { withCredentials: true });
+            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/users/logout", {}, { withCredentials: true });
             alert(response.data.message);
             navigate("/");
         } catch (error) {
