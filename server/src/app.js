@@ -21,7 +21,7 @@ dbConnect();
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: "https://expense-tracker-frontt.netlify.app",
         credentials: true,
         methods: "GET,POST,PUT,DELETE",
         allowedHeaders: "Content-Type,Authorization",
