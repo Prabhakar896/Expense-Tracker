@@ -7,7 +7,7 @@ const User=require("../../model/User")
 const userRoute = express.Router();
 const fileUpload = require("express-fileupload");
 userRoute.post("/register", registerUser);
-userRoute.post("/login", loginUserCtrl);
+userRoute.post("/login",authMiddleware, loginUserCtrl);
 userRoute.get("/", authMiddleware, fetchUsersCtrl);
 userRoute.get("/fetchall", authMiddleware, adminOnly, fetchAllUsersData);
 userRoute.post("/logout", logoutUserCtrl);
