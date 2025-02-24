@@ -1,4 +1,3 @@
-// src/components/ChartSummary.js
 import React, { useEffect, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from "chart.js";
@@ -11,35 +10,30 @@ const ChartSummary = ({ expenseData, incomeData }) => {
     });
 
     useEffect(() => {
-        if (expenseData !== null && incomeData !== null) {
-            const totalExpenses = expenseData || 0;
-            const totalIncome = incomeData || 0;
-            const profit = totalIncome - totalExpenses;
+        const totalExpenses = expenseData ?? 0;
+        const totalIncome = incomeData ?? 0;
+        const profit = totalIncome - totalExpenses;
 
-            if (totalExpenses === 0 && totalIncome === 0) {
-                setChartData({ labels: [], datasets: [] });
-            } else {
-                setChartData({
-                    labels: ["Expense", "Profit"],
-                    datasets: [
-                        {
-                            data: [totalExpenses, profit],
-                            backgroundColor: ["#FF6384", "#36A2EB"],
-                            borderColor: ["#FFFFFF", "#FFFFFF"],
-                            borderWidth: 2,
-                            hoverBackgroundColor: ["#FF6384", "#36A2EB"],
-                            hoverOffset: 10,
-                        },
-                    ],
-                });
-            }
+        if (totalExpenses === 0 && totalIncome === 0) {
+            setChartData({ labels: [], datasets: [] });
+        } else {
+            setChartData({
+                labels: ["Expenses", "Income", "Profit"],
+                datasets: [
+                    {
+                        data: [totalExpenses, totalIncome, profit],
+                        backgroundColor: ["#FF6384", "#4CAF50", "#36A2EB"], // Expense: Red, Income: Green, Profit: Blue
+                        borderColor: ["#FFFFFF", "#FFFFFF", "#FFFFFF"],
+                        borderWidth: 2,
+                        hoverOffset: 10,
+                    },
+                ],
+            });
         }
     }, [expenseData, incomeData]);
 
     // Function to format numbers with Indian Rupees symbol
-    const formatCurrency = (amount) => {
-        return `₹${amount.toLocaleString("en-IN")}`;
-    };
+    const formatCurrency = (amount) => `₹${amount.toLocaleString("en-IN")}`;
 
     return (
         <div
@@ -63,7 +57,7 @@ const ChartSummary = ({ expenseData, incomeData }) => {
                     fontWeight: "600",
                 }}
             >
-                Expense vs Profit
+                Expense vs Income
             </h2>
             {chartData.datasets.length > 0 ? (
                 <>
@@ -77,7 +71,7 @@ const ChartSummary = ({ expenseData, incomeData }) => {
                         <Pie
                             data={chartData}
                             options={{
-                                maintainAspectRatio: false, // Disable aspect ratio to fit the container
+                                maintainAspectRatio: false,
                                 responsive: true,
                                 plugins: {
                                     legend: {
@@ -87,7 +81,7 @@ const ChartSummary = ({ expenseData, incomeData }) => {
                                                 size: 14,
                                                 family: "Arial, sans-serif",
                                             },
-                                            color: "#333333", // Legend text color
+                                            color: "#333333",
                                         },
                                     },
                                     tooltip: {
@@ -120,15 +114,9 @@ const ChartSummary = ({ expenseData, incomeData }) => {
                             color: "#555555",
                         }}
                     >
-                        <p style={{ margin: "10px 0" }}>
-                            <strong>Total Income:</strong> {formatCurrency(incomeData)}
-                        </p>
-                        <p style={{ margin: "10px 0" }}>
-                            <strong>Total Expenses:</strong> {formatCurrency(expenseData)}
-                        </p>
-                        <p style={{ margin: "10px 0" }}>
-                            <strong>Profit:</strong> {formatCurrency(incomeData - expenseData)}
-                        </p>
+                        <p><strong>Total Income:</strong> {formatCurrency(incomeData ?? 0)}</p>
+                        <p><strong>Total Expenses:</strong> {formatCurrency(expenseData ?? 0)}</p>
+                        <p><strong>Profit:</strong> {formatCurrency((incomeData ?? 0) - (expenseData ?? 0))}</p>
                     </div>
                 </>
             ) : (

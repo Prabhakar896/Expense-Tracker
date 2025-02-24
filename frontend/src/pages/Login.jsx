@@ -1,34 +1,24 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import Particles from "../Design/Particles"; // Assuming you have a Particles component
-import { FaEnvelope, FaLock } from 'react-icons/fa'; // Icons for email and password
-import ax from "./axios"
+import Particles from "../Design/Particles"; 
+import { FaEnvelope, FaLock } from 'react-icons/fa';
+import ax from "./axios";
+
 function Login() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    email: '',
-    password: '',
-  });
-  const [error, setError] = useState(''); // State for handling errors
+  const [userData, setUserData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
+    setUserData(prevData => ({ ...prevData, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError('');
     try {
-      const response = await ax.post("/users/login", userData, {
-        withCredentials: true, 
-      });
-
-      
+      await ax.post("/users/login", userData, { withCredentials: true });
       navigate('/home');
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);
@@ -37,7 +27,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Particles Background */}
       <div className="absolute top-0 left-0 w-full h-full z-0">
         <Particles
@@ -53,7 +43,7 @@ function Login() {
       </div>
 
       {/* Login Form */}
-      <div className="relative z-10 w-full max-w-md p-8 bg-white bg-opacity-10 backdrop-blur-sm rounded-lg border border-white border-opacity-20 shadow-2xl">
+      <div className="relative z-10 w-full max-w-md p-6 sm:p-8 bg-white bg-opacity-10 backdrop-blur-sm rounded-lg border border-white border-opacity-20 shadow-2xl">
         <h1 className="text-blue-900 text-3xl font-bold text-center mb-6 animate-fadeIn">
           Login
         </h1>
