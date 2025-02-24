@@ -10,7 +10,7 @@ function Home() {
     const [userId, setUserId] = useState(null);
     const [expenseData, setExpenseData] = useState(null);
     const [incomeData, setIncomeData] = useState(null);
-
+    axios.defaults.withCredentials = true;
     useEffect(() => {
         const fetchUser = async () => {
             try {

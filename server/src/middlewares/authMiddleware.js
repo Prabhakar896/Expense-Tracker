@@ -8,9 +8,14 @@ const authMiddleware = expressAsyncHandler(async (req, res, next) => {
     }
     try {
         const decodedUser = jwt.verify(token, process.env.JWT_KEY);
-        req.user = await User.findById(decodedUser.id).select("-password");
-       
-        next();
+        const user = await User.findById(decoded.id).select('-password');
+
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+
+    req.user = user;
+    next();
     } catch (err) {
         res.clearCookie("authToken");
         res.status(401).json({ message: "Invalid or expired token" });

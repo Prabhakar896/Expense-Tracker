@@ -24,8 +24,6 @@ app.use(
         origin: "https://expense-tracker-frontt.netlify.app",  // Frontend URL
         credentials: true,
         methods: "GET,POST,PUT,DELETE",
-        allowedHeaders: "Content-Type,Authorization",
-        optionsSuccessStatus: 200
     })
 );
 app.use((req, res, next) => {

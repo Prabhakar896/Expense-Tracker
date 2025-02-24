@@ -14,24 +14,16 @@ const registerUser = expressAsyncHandler(async (req, res) => {
         return res.status(400).json({ msg: "User already exists" });
     }
 
-    const isAdminExists = await User.findOne({ isAdmin: true });
-    if (isAdmin && (email !== "333@gmail.com" || password !== "55556666")) {
-        return res.status(403).json({ message: "You are not allowed to create an admin account" });
-    }
-
-    if (isAdminExists && isAdmin) {
-        return res.status(403).json({ message: "Admin account already exists!" });
-    }
 
     try {
         const user = await User.create({ email, firstname, lastname, password, isAdmin });
 
         const token = generateToken(user._id);
-        await res.cookie("authToken", token, {
+          res.cookie("authToken", token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "None",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
         res.status(200).json({
@@ -43,7 +35,6 @@ const registerUser = expressAsyncHandler(async (req, res) => {
                 lastname: user.lastname,
                 isAdmin: user.isAdmin,
             },
-            token,
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -78,11 +69,11 @@ const loginUserCtrl = expressAsyncHandler(async (req, res) => {
     if (userFound && (await userFound.isPasswordMatch(password))) {
         const token = generateToken(userFound._id);
 
-        await res.cookie("authToken", token, {
-            httpOnly: true, 
+         res.cookie("authToken", token, {
+            httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            sameSite: "None",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
         res.json({
@@ -146,10 +137,10 @@ const uploadProfilePic = expressAsyncHandler(async (req, res) => {
 // ✅ Logout User
 const logoutUserCtrl = expressAsyncHandler(async (req, res) => {
     try {
-        await res.clearCookie("authToken", {
+        res.clearCookie("authToken", {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", 
-            sameSite: "None",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         });
 
         res.status(200).json({ message: "Logged out successfully" });
