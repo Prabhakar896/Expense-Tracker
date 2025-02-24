@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Particles from "../Design/Particles"; 
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa'; 
-
+import ax from "./axios";
 function Register() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
@@ -25,25 +25,30 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); 
+    setError("");
+  
     try {
-      const response = await axios.post(
-        "https://expense-tracker-crmj.onrender.com/api/users/register",
-        userData,
-        { withCredentials: true }
-      );
-
+      const response = await ax.post("/users/register", userData);
+  
       if (response.data.token) {
         localStorage.setItem("authToken", response.data.token);
-        navigate("/home");
+        
+        // Ensure the token is stored before redirecting
+        setTimeout(() => {
+          navigate("/home");
+        }, 500);  // Add a small delay for smoother redirection
       } else {
-        setError(response.data.msg); 
+        setError(response.data.msg || "Registration failed!");
       }
-    } catch (error) {
+    }catch (error) {
       console.error("Registration failed:", error.response ? error.response.data : error.message);
-      setError(error.response ? error.response.data.message : "Something went wrong!");
+      
+      // Ensure correct property is used
+      setError(error.response?.data?.msg || "Something went wrong!");
     }
+    
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 relative overflow-hidden">

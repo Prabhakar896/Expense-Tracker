@@ -28,14 +28,16 @@ const registerUser = expressAsyncHandler(async (req, res) => {
 
         res.status(200).json({
             msg: "Registered successfully & logged in!",
+            token,  
             user: {
                 _id: user._id,
                 email: user.email,
                 firstname: user.firstname,
                 lastname: user.lastname,
-                isAdmin: user.isAdmin,
+                isAdmin: user.isAdmin
             },
         });
+        
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -71,11 +73,10 @@ const loginUserCtrl = expressAsyncHandler(async (req, res) => {
 
          res.cookie("authToken", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            secure: true,
+            sameSite: "None",
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
-
         res.json({
             _id: userFound._id,
             email: userFound.email,

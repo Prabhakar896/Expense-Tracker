@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import FuzzyText from "../Design/FuzzyText"; // Ensure you import FuzzyText correctly
 import { useNavigate } from "react-router-dom";
+import ax from "./axios"
 const Profile = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -12,9 +13,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const res = await axios.get("https://expense-tracker-crmj.onrender.com/api/users/", {
-                    withCredentials: true,
-                });
+                const res = await ax.get("/users/");
                 setUser(res.data);
             } catch (err) {
                 console.error("Error fetching profile:", err);
@@ -51,10 +50,9 @@ const Profile = () => {
 
             if (cloudinaryResponse.status === 200) {
                 const imageUrl = cloudinaryResponse.data.secure_url;
-                const updateResponse = await axios.put(
-                    "https://expense-tracker-crmj.onrender.com/api/users/upload-profile-pic",
+                const updateResponse = await ax.put(
+                    "/users/upload-profile-pic",
                     { profilePic: imageUrl },
-                    { withCredentials: true }
                 );
 
                 if (updateResponse.status === 200) {
@@ -73,7 +71,7 @@ const Profile = () => {
     };
     const handleLogout = async () => {
         try {
-            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/users/logout", {}, { withCredentials: true });
+            const response = await ax.post("/users/logout", {});
             alert(response.data.message);
             navigate("/");
         } catch (error) {

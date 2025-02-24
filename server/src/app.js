@@ -17,24 +17,18 @@ const path = require("path");
 errorHandler
 dbConnect();
 
-app.use(cookieParser());
+
 
 app.use(
     cors({
-        origin: "https://expense-tracker-frontt.netlify.app",  // Frontend URL
+        origin: "http://localhost:5173",
         credentials: true,
         methods: "GET,POST,PUT,DELETE",
+        allowedHeaders: "Content-Type,Authorization",
+        optionsSuccessStatus: 200
     })
 );
-app.use((req, res, next) => {
-  if (process.env.NODE_ENV === "production") {
-      res.setHeader("Access-Control-Allow-Credentials", "true");
-      res.setHeader("Access-Control-Allow-Origin", "https://expense-tracker-frontt.netlify.app");
-      res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  }
-  next();
-});
+
 app.use(express.json())
 app.get("/api",(req,res)=>{
     res.json({msg:"Welcome Expenses tracker API"})

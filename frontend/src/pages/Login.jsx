@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Particles from "../Design/Particles"; // Assuming you have a Particles component
 import { FaEnvelope, FaLock } from 'react-icons/fa'; // Icons for email and password
-
+import ax from "./axios"
 function Login() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
@@ -24,11 +24,11 @@ function Login() {
     e.preventDefault();
     setError(''); // Clear previous errors
     try {
-      const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/users/login", userData, {
+      const response = await ax.post("/users/login", userData, {
         withCredentials: true, 
       });
 
-      console.log('Login successful:', response.data);
+      
       navigate('/home');
     } catch (error) {
       console.error('Login failed:', error.response ? error.response.data : error.message);

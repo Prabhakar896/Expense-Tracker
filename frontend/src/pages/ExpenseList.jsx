@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import ax from "./axios"
 function ExpenseList() {
     const navigate=useNavigate();
     const [expense, setExpense] = useState([]);
@@ -13,9 +14,7 @@ function ExpenseList() {
 
     const fetchIncomeDetails = async () => {
         try {
-            const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/expenses/spec?page=${currentPage}`, {
-                withCredentials: true,
-            });
+            const response = await ax.get(`/expenses/spec?page=${currentPage}`);
             setExpense(response.data.expense);
             setTotalPages(response.data.totalPages);
             setCurrentPage(response.data.currentPage);
@@ -30,9 +29,7 @@ function ExpenseList() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://expense-tracker-crmj.onrender.com/api/expenses/${id}`, {
-                withCredentials: true,
-            });
+            await ax.delete(`/expenses/${id}`);
             setExpense(expense.filter((expense) => expense._id !== id));
         } catch (error) {
             console.error("Error deleting expense:", error);
@@ -51,9 +48,7 @@ function ExpenseList() {
     const handleUpdate = async () => {
         if (!editexpense) return;
         try {
-            const response = await axios.put(`https://expense-tracker-crmj.onrender.com/api/expenses/${editexpense._id}`, formData, {
-                withCredentials: true,
-            });
+            const response = await ax.put(`/expenses/${editexpense._id}`, formData, );
             setExpense(expense.map((expense) => (expense._id === editexpense._id ? response.data : expense)));
             setEditexpense(null);
         } catch (error) {
@@ -63,9 +58,7 @@ function ExpenseList() {
 
     const handleAddExpense = async () => {
         try {
-            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/expenses/spec", formData, {
-                withCredentials: true,
-            });
+            const response = await ax.post("/expenses/spec", formData);
             setExpense([...expense, response.data]);
             setFormData({ title: "", description: "", amount: "" });
             setIsCreating(false);

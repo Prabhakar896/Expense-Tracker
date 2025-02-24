@@ -5,6 +5,7 @@ import ExpSummary from "../components/ExpSummary";
 import IncSummary from "../components/IncSummary";
 import ChartSummary from "../components/ChartSummary";
 import FuzzyText from "../Design/FuzzyText";
+import ax from "./axios"
 function Home() {
     const navigate = useNavigate();
     const [userId, setUserId] = useState(null);
@@ -14,9 +15,7 @@ function Home() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await axios.get("https://expense-tracker-crmj.onrender.com/api/users", {
-                    withCredentials: true,
-                });
+                const response = await ax.get("/users");
                 setUserId(response.data._id);
             } catch (error) {
                 console.error("Error fetching user data:", error);
@@ -30,7 +29,7 @@ function Home() {
         const fetchExpenses = async () => {
             if (userId) {
                 try {
-                    const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/tot/summary/exp/${userId}`, {
+                    const response = await ax.get(`/tot/summary/exp/${userId}`, {
                         withCredentials: true,
                     });
                     setExpenseData(response.data);
@@ -43,9 +42,7 @@ function Home() {
         const fetchIncome = async () => {
             if (userId) {
                 try {
-                    const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/tot/summary/inc/${userId}`, {
-                        withCredentials: true,
-                    });
+                    const response = await ax.get(`/tot/summary/inc/${userId}`);
                     setIncomeData(response.data);
                 } catch (error) {
                     console.error("Error fetching income data:", error);
@@ -59,7 +56,7 @@ function Home() {
 
     const handleLogout = async () => {
         try {
-            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/users/logout", {}, { withCredentials: true });
+            const response = await ax.post("/users/logout", {});
             alert(response.data.message);
             navigate("/");
         } catch (error) {

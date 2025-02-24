@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import ax from "../pages/axios"
 const IncSummary = ({ userId }) => {
   const [summary, setSummary] = useState({
     totalIncome: 0,
@@ -12,12 +12,8 @@ const IncSummary = ({ userId }) => {
   useEffect(() => {
     const fetchIncomeSummary = async () => {
       try {
-        const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/income/summary/${userId}`, {
-          withCredentials: true,
-        });
-  
-        console.log("API Response:", response.data.totalIncome);
-        console.log("User ID received:", userId); // Debugging
+        const response = await ax.get(`/income/summary/${userId}`);
+  // Debugging
         // Debugging log
   
         if (response.data) {

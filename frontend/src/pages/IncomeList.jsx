@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import ax from "./axios"
 function IncomeList() {
     const navigate=useNavigate();
     const [incomes, setIncomes] = useState([]);
@@ -14,9 +14,7 @@ const [totalPages, setTotalPages] = useState(1);
 
     const fetchIncomeDetails = async (page = 1) => {
         try {
-            const response = await axios.get(`https://expense-tracker-crmj.onrender.com/api/income/spec?page=${page}`, {
-                withCredentials: true,
-            });
+            const response = await ax.get(`/income/spec?page=${page}`);
     
             setIncomes(response.data.incomes);
             setTotalPages(response.data.totalPages);
@@ -34,9 +32,7 @@ const [totalPages, setTotalPages] = useState(1);
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://expense-tracker-crmj.onrender.com/api/income/${id}`, {
-                withCredentials: true,
-            });
+            await ax.delete(`/income/${id}`);
             setIncomes(incomes.filter((income) => income._id !== id));
         } catch (error) {
             console.error("Error deleting income:", error);
@@ -55,9 +51,7 @@ const [totalPages, setTotalPages] = useState(1);
     const handleUpdate = async () => {
         if (!editIncome) return;
         try {
-            const response = await axios.put(`https://expense-tracker-crmj.onrender.com/api/income/${editIncome._id}`, formData, {
-                withCredentials: true,
-            });
+            const response = await ax.put(`/income/${editIncome._id}`, formData);
             setIncomes(incomes.map((income) => (income._id === editIncome._id ? response.data : income)));
             setEditIncome(null);
         } catch (error) {
@@ -67,9 +61,7 @@ const [totalPages, setTotalPages] = useState(1);
 
     const handleAddIncome = async () => {
         try {
-            const response = await axios.post("https://expense-tracker-crmj.onrender.com/api/income/spec", formData, {
-                withCredentials: true,
-            });
+            const response = await ax.post("/income/spec", formData);
             setIncomes([...incomes, response.data]);
             setFormData({ title: "", description: "", amount: "" });
             setIsCreating(false);
